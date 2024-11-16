@@ -26,6 +26,7 @@ public class SEL {
         options.addArguments("--remote-allow-origins=*");
         
       WebDriver  driver = new ChromeDriver(options);
+      //sucessfull registeration
       String randomUsername=RandomStringUtils.randomAlphabetic(4);
       String rndlastname=RandomStringUtils.randomAlphabetic(6);
       String randemail=randomUsername + "@gmail.com";
@@ -47,7 +48,80 @@ public class SEL {
      driver.findElement(By.xpath("//button[@class='action switch']")).click();
      driver.findElement(By.xpath("//a[contains(text(), 'Sign Out')]")).click();
      driver.findElement(By.xpath("//a[contains(text(), 'Sign In')]")).click();
+     //error validations
+     
+     //Without firstname
+     driver.findElement(By.xpath("//a[text()='Create an Account']")).click();
+     driver.findElement(By.id("firstname")).clear();
+     driver.findElement(By.id("lastname")).sendKeys(rndlastname);
+     driver.findElement(By.id("email_address")).sendKeys(randemail);
+     driver.findElement(By.id("password")).sendKeys(randpass);
+     driver.findElement(By.id("password-confirmation")).sendKeys(randpass);
+     Thread.sleep(2000);
+     driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+     Thread.sleep(2000);
+    String msg1= driver.findElement(By.xpath("//div[@id='firstname-error']")).getText();
+    System.out.println(msg1);
+    Assert.assertEquals(msg1, "This is a required field."); 
     
+    //without lastname
+    driver.findElement(By.xpath("//a[text()='Create an Account']")).click();
+    driver.findElement(By.id("firstname")).sendKeys(randomUsername);
+    driver.findElement(By.id("lastname")).clear();
+    driver.findElement(By.id("email_address")).sendKeys(randemail);
+    driver.findElement(By.id("password")).sendKeys(randpass);
+    driver.findElement(By.id("password-confirmation")).sendKeys(randpass);
+    Thread.sleep(2000);
+    driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+    Thread.sleep(2000);
+    String msg2= driver.findElement(By.xpath("//div[@id='lastname-error']")).getText();
+    System.out.println(msg2);
+    Assert.assertEquals(msg2, "This is a required field.");
+    
+    //invalid emailid
+    driver.findElement(By.xpath("//a[text()='Create an Account']")).click();
+    driver.findElement(By.id("firstname")).sendKeys(randomUsername);
+    driver.findElement(By.id("lastname")).sendKeys(rndlastname);
+    driver.findElement(By.id("email_address")).sendKeys(rndlastname);
+    driver.findElement(By.id("password")).sendKeys(randpass);
+    driver.findElement(By.id("password-confirmation")).sendKeys(randpass);
+    Thread.sleep(2000);
+    driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+    Thread.sleep(2000);
+    String msg3= driver.findElement(By.xpath("//div[@id='email_address-error']")).getText();
+    System.out.println(msg3);
+    Assert.assertEquals(msg3, "Please enter a valid email address (Ex: johndoe@domain.com).");
+    
+    //invalid password
+    driver.findElement(By.xpath("//a[text()='Create an Account']")).click();
+    driver.findElement(By.id("firstname")).sendKeys(randomUsername);
+    driver.findElement(By.id("lastname")).sendKeys(rndlastname);
+    driver.findElement(By.id("email_address")).sendKeys(randemail);
+    driver.findElement(By.id("password")).sendKeys(rndlastname);
+    driver.findElement(By.id("password-confirmation")).sendKeys(rndlastname);
+    Thread.sleep(2000);
+    driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+    Thread.sleep(2000);
+    String msg4= driver.findElement(By.xpath("//div[@id='password-error']")).getText();
+    System.out.println(msg4);
+    Assert.assertEquals(msg4, "Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored.");
+    
+    // mismatching password
+    driver.findElement(By.xpath("//a[text()='Create an Account']")).click();
+    driver.findElement(By.id("firstname")).sendKeys(randomUsername);
+    driver.findElement(By.id("lastname")).sendKeys(rndlastname);
+    driver.findElement(By.id("email_address")).sendKeys(randemail);
+    driver.findElement(By.id("password")).sendKeys(randpass);
+    driver.findElement(By.id("password-confirmation")).sendKeys("Ajay@5678");
+    Thread.sleep(2000);
+    driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+    Thread.sleep(2000);
+    String msg5= driver.findElement(By.xpath("//div[@id='password-confirmation-error']")).getText();
+    System.out.println(msg5);
+    Assert.assertEquals(msg5, "Please enter the same value again.");
+    
+    //signin
+    driver.findElement(By.xpath("//a[contains(text(), 'Sign In')]")).click();
      driver.findElement(By.id("email")).sendKeys(randemail);
      driver.findElement(By.id("pass")).sendKeys(randpass);
      driver.findElement(By.xpath("//button[@class='action login primary']")).click();   
