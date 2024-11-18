@@ -1,2 +1,0 @@
-# AJAY-INCUBYTE
-Selenium Automation 
